@@ -236,3 +236,174 @@ This route is used to log out the currently authenticated user.
 
 - The token used for authentication is blacklisted to prevent further use.
 - The `token` cookie is cleared upon successful logout.
+
+### POST `/captain/login`
+
+This route is used to log in an existing captain.
+
+#### Request Body
+
+| Field      | Type   | Validation                         | Description                  |
+| ---------- | ------ | ---------------------------------- | ---------------------------- |
+| `email`    | String | Must be a valid email address      | The email of the captain     |
+| `password` | String | Must be at least 8 characters long | The password for the captain |
+
+#### Example Request Body
+
+```json
+{
+  "email": "captain@example.com",
+  "password": "password123"
+}
+```
+
+#### Responses
+
+- **200 OK**: Captain logged in successfully.
+
+  ```json
+  {
+    "message": "Captain logged in successfully",
+    "captain": {
+      "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+      },
+      "email": "captain@example.com",
+      "vechile": {
+        "color": "red",
+        "plateNumber": "ABC123",
+        "capacity": 4,
+        "type": "car"
+      }
+    },
+    "token": "auth_token"
+  }
+  ```
+
+- **400 Bad Request**: Validation errors.
+
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "invalid email",
+        "param": "email",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+- **401 Unauthorized**: Invalid email or password.
+
+  ```json
+  {
+    "error": "Invalid email or password"
+  }
+  ```
+
+- **500 Internal Server Error**: Server encountered an error.
+
+  ```json
+  {
+    "message": "Internal server error"
+  }
+  ```
+
+---
+
+### GET `/captain/logout`
+
+This route is used to log out the currently authenticated captain.
+
+#### Headers
+
+| Header          | Type   | Description                           |
+| --------------- | ------ | ------------------------------------- |
+| `Authorization` | String | Bearer token of the logged-in captain |
+
+#### Responses
+
+- **200 OK**: Captain logged out successfully.
+
+  ```json
+  {
+    "message": "Captain logged out successfully"
+  }
+  ```
+
+- **401 Unauthorized**: Captain is not authenticated.
+
+  ```json
+  {
+    "message": "Unauthorized access"
+  }
+  ```
+
+- **500 Internal Server Error**: Server encountered an error.
+
+  ```json
+  {
+    "message": "Internal server error"
+  }
+  ```
+
+#### Notes
+
+- The token used for authentication is blacklisted to prevent further use.
+- The `token` cookie is cleared upon successful logout.
+
+---
+
+### GET `/captain/profile`
+
+This route is used to retrieve the profile of the currently authenticated captain.
+
+#### Headers
+
+| Header          | Type   | Description                           |
+| --------------- | ------ | ------------------------------------- |
+| `Authorization` | String | Bearer token of the logged-in captain |
+
+#### Responses
+
+- **200 OK**: Captain profile retrieved successfully.
+
+  ```json
+  {
+    "captain": {
+      "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+      },
+      "email": "captain@example.com",
+      "vechile": {
+        "color": "red",
+        "plateNumber": "ABC123",
+        "capacity": 4,
+        "type": "car"
+      }
+    }
+  }
+  ```
+
+- **404 Not Found**: Captain not found.
+
+  ```json
+  {
+    "message": "Captain not found"
+  }
+  ```
+
+- **500 Internal Server Error**: Server encountered an error.
+
+  ```json
+  {
+    "message": "Internal server error"
+  }
+  ```
+
+#### Notes
+
+- This requires the captain to be authenticated using a valid token.
