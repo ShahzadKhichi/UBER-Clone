@@ -8,8 +8,11 @@ module.exports.createUser = async ({
   if (!firstname || !email || !password) {
     throw new Error("All fields are required");
   }
-  const existingUser = await User.find({ email });
-  if (existingUser.length > 0) {
+  const existingUser = await User.findOne({ email });
+
+  console.log(password);
+
+  if (existingUser) {
     throw new Error("User already exists");
   }
   const user = await User.create({

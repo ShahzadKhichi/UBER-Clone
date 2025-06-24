@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 4000;
 const app = express();
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(cors("*"));
+app.use(cors({ origin: true, credentials: true })); // Enable CORS for all origins
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //routes import
