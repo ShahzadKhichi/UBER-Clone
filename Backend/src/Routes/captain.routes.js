@@ -13,16 +13,16 @@ router.post(
     body("password")
       .isLength({ min: 8 })
       .withMessage("Password must be at least 8 characters long"),
-    body("vechile.color").notEmpty().withMessage("Vehicle color is required"),
-    body("vechile.plateNumber")
+    body("vehicle.color").notEmpty().withMessage("vehicle color is required"),
+    body("vehicle.plateNumber")
       .notEmpty()
-      .withMessage("Vehicle plate number is required"),
-    body("vechile.capacity")
+      .withMessage("vehicle plate number is required"),
+    body("vehicle.capacity")
       .isNumeric()
-      .withMessage("Vehicle capacity must be a number"),
-    body("vechile.type")
+      .withMessage("vehicle capacity must be a number"),
+    body("vehicle.type")
       .isIn(["car", "bike", "auto"])
-      .withMessage("Vehicle type must be one of car, bike, or auto"),
+      .withMessage("vehicle type must be one of car, bike, or auto"),
   ],
   captainController.registerCaptain
 );

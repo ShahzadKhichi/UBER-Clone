@@ -10,7 +10,7 @@ module.exports.registerCaptain = async (req, res) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { fullname, email, password, vechile } = req.body;
+    const { fullname, email, password, vehicle } = req.body;
 
     const hashedPassword = await Captain.hashPassword(password);
 
@@ -18,7 +18,7 @@ module.exports.registerCaptain = async (req, res) => {
       fullname,
       email,
       password: hashedPassword,
-      vechile,
+      vehicle,
     });
 
     const token = cap.generateAuthToken();
@@ -29,7 +29,7 @@ module.exports.registerCaptain = async (req, res) => {
       captain: {
         fullname,
         email,
-        vechile,
+        vehicle,
       },
       token,
     });
@@ -64,7 +64,7 @@ module.exports.loginCaptain = async (req, res) => {
       captain: {
         fullname: cap.fullname,
         email: cap.email,
-        vechile: cap.vechile,
+        vehicle: cap.vehicle,
       },
       token,
     });
@@ -101,7 +101,7 @@ module.exports.getCaptainProfile = async (req, res) => {
       captain: {
         fullname: captain.fullname,
         email: captain.email,
-        vechile: captain.vechile,
+        vehicle: captain.vehicle,
       },
     });
   } catch (error) {

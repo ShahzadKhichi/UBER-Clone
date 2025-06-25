@@ -1,7 +1,10 @@
+import axios from "axios";
 import React from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const CaptainLogin = () => {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [userData, setUserData] = useState({
     email: "",
     password: "",
@@ -9,7 +12,24 @@ const CaptainLogin = () => {
 
   async function submitHandler(e) {
     e.preventDefault();
-    console.log("hello");
+    setIsLoading(true);
+    if (!userData.email || !userData.password) {
+      alert("Please fill in all fields");
+      setIsLoading(false);
+      return;
+    }
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/captain/login`,
+      userData
+    );
+    setIsLoading(false);
+    if (response.status === 200) {
+      localStorage.setItem("captain", JSON.stringify(response.data));
+      localStorage.setItem("captainToken", response.data.token);
+      navigate("/captain-home");
+    } else {
+      alert("Invalid email or password");
+    }
   }
 
   return (

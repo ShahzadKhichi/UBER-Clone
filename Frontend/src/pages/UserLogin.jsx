@@ -8,6 +8,8 @@ const UserLogin = () => {
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
+  const { setUser } = useContext(UserDataContext);
 
   async function submitHandler(e) {
     e.preventDefault();
@@ -18,13 +20,11 @@ const UserLogin = () => {
 
     if (response.status === 200) {
       const { user, token } = response.data;
-      setUserData({
-        email: user.email,
-        password: "",
-      });
+
+      setUser({ ...user, token });
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("token", token);
-      window.location.href = "/home";
+      navigate("/Home");
     } else {
       alert("Invalid email or password");
     }

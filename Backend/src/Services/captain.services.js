@@ -4,7 +4,7 @@ module.exports.createCaptain = async ({
   fullname,
   email,
   password,
-  vechile,
+  vehicle,
 }) => {
   const alreadyExsist = await Captain.find({ email });
   if (alreadyExsist.length > 0) {
@@ -15,7 +15,7 @@ module.exports.createCaptain = async ({
     fullname,
     email,
     password,
-    vechile,
+    vehicle,
   });
   return cap;
 };

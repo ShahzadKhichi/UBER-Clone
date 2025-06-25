@@ -67,6 +67,11 @@ module.exports.loginUser = async (req, res) => {
 module.exports.logoutUser = async (req, res) => {
   try {
     const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+
+    console.log(req.headers);
+
+    console.log(token);
+
     if (!token) {
       return res.status(401).json({ message: "Unauthorized access" });
     }

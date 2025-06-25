@@ -1,8 +1,11 @@
 import React from "react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-
+import { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { CaptainDataContext } from "../Context/CaptainContext.jsx";
 const CaptainSignup = () => {
+  const navigate = useNavigate();
+  const { setCaptain } = useContext(CaptainDataContext);
   const [userData, setUserData] = useState({
     fullname: {
       firstname: "",
@@ -12,8 +15,37 @@ const CaptainSignup = () => {
     password: "",
   });
 
+  const [vechicleData, setVechicleData] = useState({
+    color: "",
+    plateNumber: "",
+    capacity: "",
+    type: "car",
+  });
+
   async function submitHandler(e) {
     e.preventDefault();
+    const captainData = {
+      ...userData,
+      vehicle: vechicleData,
+    };
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/captain/register`,
+      captainData
+    );
+
+    if (response.status === 201) {
+      alert("Captain account created successfully");
+      setCaptain({
+        ...captainData,
+        token: response.data.token,
+        password: undefined,
+      });
+      localStorage.setItem("captain", JSON.stringify(captainData));
+      localStorage.setItem("captainToken", response.data.token);
+      navigate("/captain-home");
+    } else {
+      alert("Failed to create captain account");
+    }
   }
 
   return (
@@ -79,6 +111,71 @@ const CaptainSignup = () => {
             }}
             placeholder="Password"
           />
+
+          <h3 className=" text-base font-medium mb-2">Vehicle Information </h3>
+          <div>
+            <div className="flex gap-4">
+              <input
+                className="bg-[#eeeeee] mb-7 rounded px-4 py-2 border w-1/2 text-base  placeholder:text-base "
+                type="text"
+                required
+                value={vechicleData.color}
+                onChange={(e) => {
+                  e.preventDefault();
+                  setVechicleData({ ...vechicleData, color: e.target.value });
+                }}
+                placeholder="Vehicle color"
+              />
+              <input
+                className="bg-[#eeeeee] mb-7 rounded px-4 py-2 border w-1/2 text-base  placeholder:text-base "
+                type="number"
+                required
+                value={vechicleData.plateNumber}
+                onChange={(e) => {
+                  e.preventDefault();
+                  setVechicleData({
+                    ...vechicleData,
+                    plateNumber: e.target.value,
+                  });
+                }}
+                placeholder="Vehicle plate number "
+              />
+            </div>
+            <div className="flex gap-4">
+              <input
+                className="bg-[#eeeeee] mb-7 rounded px-4 py-2 border w-1/2 text-base  placeholder:text-base "
+                type="number"
+                required
+                value={vechicleData.capacity}
+                onChange={(e) => {
+                  e.preventDefault();
+                  setVechicleData({
+                    ...vechicleData,
+                    capacity: e.target.value,
+                  });
+                }}
+                placeholder="Vehicle capacity"
+              />
+              <select
+                name="type"
+                id="type"
+                className="bg-[#eeeeee] mb-7 rounded   py-2 border w-1/2 text-base  placeholder:text-base "
+                onChange={(e) => {
+                  setVechicleData({
+                    ...vechicleData,
+                    type: e.target.value,
+                  });
+                  console.log(vechicleData);
+                }}
+              >
+                <option disabled>Select a vehicle</option>
+                <option value="car">car</option>
+                <option value="bike">bike</option>
+                <option value="auto">auto</option>
+              </select>
+            </div>
+          </div>
+
           <button className="bg-[#111111] text-white mb-5 rounded px-4 py-2  w-full text-base   ">
             Create Account
           </button>

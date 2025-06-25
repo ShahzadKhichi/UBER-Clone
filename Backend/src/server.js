@@ -20,11 +20,15 @@ const capRoutes = require("./Routes/captain.routes");
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/captain", capRoutes);
 
-app.listen(PORT, async () => {
+async function ServerStart() {
   try {
     await DbConnection();
-    console.log(`Server is listing on port ${PORT}`);
+    app.listen(PORT, async () => {
+      console.log(`Server is listing on port ${PORT}`);
+    });
   } catch (error) {
-    console.log(error);
+    console.log("Error in server start", error);
   }
-});
+}
+
+ServerStart();

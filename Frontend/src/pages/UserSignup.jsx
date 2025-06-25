@@ -6,7 +6,7 @@ import axios from "axios";
 
 const UserSignup = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useContext(UserDataContext);
+  const { user, setUser } = useContext(UserDataContext);
   const [userData, setUserData] = useState({
     fullname: {
       firstname: "",
