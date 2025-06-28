@@ -5,6 +5,7 @@ import LocationPanel from "../Components/LocationPanel";
 
 const Home = () => {
   const panelRef = useRef(null);
+  const arrRef = useRef(null);
   const [data, setData] = useState({
     pickup: "",
     destination: "",
@@ -12,17 +13,19 @@ const Home = () => {
   const [panelOpen, setPanelOpen] = useState(false);
   console.log(panelOpen);
 
-  // useGSAP(() => {
-  //   if (panelOpen) {
-  //     gsap.to(panelRef.current, {
-  //       height: "70%",
-  //     });
-  //   } else {
-  //     gsap.to(panelRef.current, {
-  //       height: "0%",
-  //     });
-  //   }
-  // }, [panelOpen]);
+  useGSAP(() => {
+    if (panelOpen) {
+      gsap.to(panelRef.current, {
+        height: "70%",
+      });
+      gsap.to(arrRef.current, { opacity: 1 });
+    } else {
+      gsap.to(panelRef.current, {
+        height: "0%",
+      });
+      gsap.to(arrRef.current, { opacity: 0 });
+    }
+  }, [panelOpen]);
   const onSubmitHandler = async (e) => {
     e.preventDefault();
   };
@@ -45,7 +48,8 @@ const Home = () => {
         <div className="bg-white p-5 h-[30%] relative">
           <div className="h-16 w-1 absolute top-[45%] bg-gray-700 left-10 rounded-full "></div>
           <h5
-            className={`absolute top-6 right-6 opacity-[${panelOpen ? 1 : 0}]`}
+            ref={arrRef}
+            className={`absolute top-6 right-6 opacity-0`}
             onClick={() => setPanelOpen(false)}
           >
             <i className="ri-arrow-down-wide-line"></i>
@@ -74,12 +78,7 @@ const Home = () => {
             />
           </form>
         </div>
-        <div
-          ref={panelRef}
-          className={`bg-red-300 h-[${
-            panelOpen ? "70%" : "0%"
-          }] transition-all duration-600`}
-        >
+        <div ref={panelRef} className={`bg-red-300 h-[0%] `}>
           <LocationPanel></LocationPanel>
         </div>
       </div>
